@@ -1,0 +1,25 @@
+<!-- <% layout('layouts/app') %>
+    <h1>SEMUA Tempat</h1>
+    <a href="/places/create">add place</a>
+    <ul>   </ul>
+-->
+<h1>ALL PLACES</h1>
+
+<% for(const place of places) { %>
+    <div class="card mb-3 row">
+        <div class="row">
+        <div class="col-md-4">
+            <img src="<%= place.image %>" alt="<%= place.title %>" class="img-fluid">
+        </div>
+        <div class="col-md-8">
+            <!-- Tambahkan informasi tambahan tentang tempat, jika diperlukan -->
+            <h3><%= place.title %></h3>
+            <p><%= place.description %></p>
+            <p class="card-text">
+                <small class="text-secondary"><%= place.location  %></small>
+            </p>
+            <a href="/places/<%= place._id %>" class="btn btn-primary">View <%= place.title %></a>
+        </div>
+        </div>
+    </div>
+<% } %>
