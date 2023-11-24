@@ -3,6 +3,7 @@ const Place = require('../models/place');
 const {placeSchema} = require('../schemas/place')
 const wrapAsync = require('../utils/wrapAsync')
 const ErrorHandler= require('../utils/ErrorHandler')
+const isValidObjectId = require('../middleware/isValidObjectId')
 
 const router = express.Router();
 
@@ -29,29 +30,32 @@ router.get('/create',(req,res)=>{
 router.post('/',validatePlace, wrapAsync (async(req,res,next)=>{
     const place = new Place(req.body.place)
     await place.save();
+    req.flash('success_msg','Place added successfully')
     res.redirect('/places')
 }))
 
-router.get('/:id',wrapAsync (async(req,res)=>{
+router.get('/:id',isValidObjectId('/places'),wrapAsync (async(req,res)=>{
     const {id} = req.params
     const place = await Place.findById(id).populate('reviews')
     res.render('places/show',{place})
 }))
 
-router.get('/:id/edit',wrapAsync (async(req,res)=>{
+router.get('/:id/edit',isValidObjectId('/places'),wrapAsync (async(req,res)=>{
         const {id} = req.params
     const place = await Place.findById(id)
     res.render('places/edit',{place})
 }))
 
-router.put('/:id',validatePlace, wrapAsync (async(req,res)=>{
+router.put('/:id',isValidObjectId('/places'),validatePlace, wrapAsync (async(req,res)=>{
 const place = await Place.findByIdAndUpdate(req.params.id,{...req.body.place})
+req.flash('success_msg','Selamat, Data berhasil di perbarui')
 res.redirect('/places')
 }))
 
 
-router.delete('/:id', wrapAsync (async (req,res)=>{
+router.delete('/:id', isValidObjectId('/places'),wrapAsync (async (req,res)=>{
     await Place.findByIdAndDelete(req.params.id)
+    req.flash('success_msg','Selamat, Data berhasil di Hapus')
     res.redirect('/places')
 }))
 
