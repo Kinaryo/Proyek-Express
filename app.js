@@ -5,9 +5,14 @@ const flash = require('connect-flash')
 const ErrorHandler= require('./utils/ErrorHandler')
 const methodOverride = require('method-override')
 const path = require('path')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
 const app = express();
 const mongoose = require('mongoose')
 const wrapAsync = require('./utils/wrapAsync')
+
+// models user 
+const User = require('./models/user')
 
 
 
@@ -36,7 +41,16 @@ app.use(session({
 }))
 
 app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()))
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
+
+
 app.use((req,res,next)=>{
+    res.locals.currentUser = req.user;
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
     next();
@@ -56,6 +70,8 @@ app.use(express.static(path.join(__dirname,'public')))
 app.get('/',(req,res)=>{
     res.render('home')
 })
+
+app.use('/',require('./routes/auth'))
 app.use('/places',require('./routes/places'))
 app.use('/places/:place_id/reviews', require('./routes/reviews'))
 

@@ -1,0 +1,30 @@
+<% layout('layouts/app') %>
+
+<h1 class="text-center">Login</h1>
+<div class="col-6 offset-3">
+
+    <form action="/login" method="POST" class="validated-form" novalidate>
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" name="username" id="title" class="form-control" required>
+           <div class="valid-feedback">
+            looks good
+           </div> 
+           <div class="invalid-feedback">
+            please fill out.
+           </div>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="password" id ="password" class="form-control" required>
+            <div class="valid-feedback">
+                looks good
+               </div> 
+               <div class="invalid-feedback">
+                please fill out.
+               </div>
+       
+        <button type="submit" class="btn btn-success mt-3">login</button>
+        <a href="/places"> <button type="button" class="btn btn-danger mt-3">Cancel</button></a>
+    </form>
+</div>
