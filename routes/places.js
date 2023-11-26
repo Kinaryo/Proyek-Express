@@ -27,11 +27,12 @@ const validatePlace = (req,res,next) =>{
 
 
 router.get('/',  wrapAsync (PlaceController.index))
+router.post('/',isAuth,validatePlace, wrapAsync (PlaceController.store))
 
 router.get('/create',isAuth,(req,res)=>{
     res.render('places/create')
 })
-router.post('/',isAuth,validatePlace, wrapAsync (PlaceController.store))
+
 
 router.get('/:id',isValidObjectId('/places'),wrapAsync (PlaceController.show))
 
